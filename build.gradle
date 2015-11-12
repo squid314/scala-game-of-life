@@ -17,7 +17,7 @@ tasks.withType( ScalaCompile ) {
     scalaCompileOptions.useAnt = false
 }
 
-task run( type: JavaExec, dependsOn: classes) {
+task run( type: JavaExec, dependsOn: check) {
     main = 'Main'
     classpath sourceSets.main.runtimeClasspath
     classpath configurations.runtime
