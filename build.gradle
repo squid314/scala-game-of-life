@@ -13,6 +13,10 @@ dependencies {
     compile 'org.scala-lang:scala-library:2.11.7'
 }
 
+tasks.withType( ScalaCompile ) {
+    scalaCompileOptions.useAnt = false
+}
+
 task run( type: JavaExec, dependsOn: classes) {
     main = 'Main'
     classpath sourceSets.main.runtimeClasspath
