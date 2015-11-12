@@ -3,3 +3,7 @@ object Main {
         println( "Hello, world!" )
     }
 }
+
+object Time extends App {
+    println( "Hello, Time!" )
+}

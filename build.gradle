@@ -19,3 +19,10 @@ task run( type: JavaExec, dependsOn: check) {
     classpath sourceSets.main.runtimeClasspath
     classpath configurations.runtime
 }
+
+task time( type: JavaExec, dependsOn: check) {
+    systemProperties['scala.time'] = ''
+    main = 'Time'
+    classpath sourceSets.main.runtimeClasspath
+    classpath configurations.runtime
+}
