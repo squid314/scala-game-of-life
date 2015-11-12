@@ -1,7 +1,4 @@
-
-// scala project
 apply plugin: 'scala'
-// intellij idea stuff
 apply plugin: 'idea'
 
 repositories {
