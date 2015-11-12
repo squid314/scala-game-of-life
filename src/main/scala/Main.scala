@@ -7,3 +7,7 @@ object Main {
 object Time extends App {
     println( "Hello, Time!" )
 }
+
+object ConwaysGameOfLifeRunner extends App {
+    println( "<game of life will run here>" )
+}

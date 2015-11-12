@@ -26,3 +26,10 @@ task time( type: JavaExec, dependsOn: check) {
     classpath sourceSets.main.runtimeClasspath
     classpath configurations.runtime
 }
+
+task life( type: JavaExec, dependsOn: check) {
+    systemProperties['scala.time'] = ''
+    main = 'ConwaysGameOfLifeRunner'
+    classpath sourceSets.main.runtimeClasspath
+    classpath configurations.runtime
+}
