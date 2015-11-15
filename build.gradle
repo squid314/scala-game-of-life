@@ -15,21 +15,14 @@ tasks.withType( ScalaCompile ) {
 }
 
 task run( type: JavaExec, dependsOn: check) {
-    main = 'Main'
-    classpath sourceSets.main.runtimeClasspath
-    classpath configurations.runtime
-}
-
-task time( type: JavaExec, dependsOn: check) {
-    systemProperties['scala.time'] = ''
-    main = 'Time'
+    main = 'org.life.Main'
     classpath sourceSets.main.runtimeClasspath
     classpath configurations.runtime
 }
 
 task life( type: JavaExec, dependsOn: check) {
     systemProperties['scala.time'] = ''
-    main = 'ConwaysGameOfLifeRunner'
+    main = 'org.life.ConwaysGameOfLifeRunner'
     classpath sourceSets.main.runtimeClasspath
     classpath configurations.runtime
 }
