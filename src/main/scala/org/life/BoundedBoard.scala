@@ -2,18 +2,12 @@ package org.life
 
 import scala.collection.immutable.List
 
-/** Represents a Game of Life board which is bounded by a destructive border. */
-case class BoundedBoard( board: List[ List[ Boolean ] ] ) {
+abstract class AbstractMatrixBackedBoard {
+    val board: List[ List[ Boolean ] ]
+
     def apply( i: Int, j: Int ) = board( i )( j )
 
-    def neighbors( i: Int, j: Int ) = {
-        ( i - 1 to i + 1 ).filter( board.isDefinedAt )
-                .flatMap( ii => ( j - 1 to j + 1 ).filter( board( ii ).isDefinedAt )
-                        .map( jj => (ii, jj) ) )
-                .filter( pair => pair._1 != i || pair._2 != j )
-                .map( pair => board( pair._1 )( pair._2 ) )
-                .toList
-    }
+    def neighbors( i: Int, j: Int ): List[ Boolean ]
 
     def liveNeighborCount( i: Int, j: Int ) = {
         neighbors( i, j ).count( alive => alive )
@@ -41,6 +35,18 @@ case class BoundedBoard( board: List[ List[ Boolean ] ] ) {
 
     override def toString = {
         board.flatMap( row => row.map( cell => if ( cell ) "X " else ". " ) :+ "\n" ).mkString
+    }
+}
+
+/** Represents a Game of Life board which is bounded by a destructive border. */
+case class BoundedBoard( board: List[ List[ Boolean ] ] ) extends AbstractMatrixBackedBoard {
+    def neighbors( i: Int, j: Int ) = {
+        ( i - 1 to i + 1 ).filter( board.isDefinedAt )
+                .flatMap( ii => ( j - 1 to j + 1 ).filter( board( ii ).isDefinedAt )
+                        .map( jj => (ii, jj) ) )
+                .filter( pair => pair._1 != i || pair._2 != j )
+                .map( pair => board( pair._1 )( pair._2 ) )
+                .toList
     }
 }
 
