@@ -1,13 +1,30 @@
 apply plugin: 'scala'
 apply plugin: 'idea'
 
+// scalatest plugin requires extra stuff for the build script itself
+buildscript {
+    repositories { maven { url "https://plugins.gradle.org/m2/" } }
+    dependencies { classpath "com.github.maiflai:gradle-scalatest:0.10" }
+}
+apply plugin: "com.github.maiflai.scalatest"
+
 repositories {
     mavenLocal()
     mavenCentral()
 }
 
+ext {
+    versions = [
+        scala: '2.11.7',
+        scalatest: '2.2.4'
+    ]
+}
+
 dependencies {
-    compile 'org.scala-lang:scala-library:2.11.7'
+    compile "org.scala-lang:scala-library:$versions.scala"
+    runtime "org.scala-lang:scala-compiler:$versions.scala"
+    testCompile "org.scalatest:scalatest_2.11:$versions.scalatest"
+    testRuntime "org.pegdown:pegdown:1.1.0"
 }
 
 tasks.withType( ScalaCompile ) {
