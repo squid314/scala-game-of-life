@@ -1,6 +1,6 @@
 package org.life
 
-import org.life.BoardFactory.bounded
+import org.life.MatrixBoardFactory.bounded
 import org.scalatest._
 
 class BoundedBoardSpec extends FlatSpec with Matchers {

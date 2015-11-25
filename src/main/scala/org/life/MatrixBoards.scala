@@ -72,7 +72,7 @@ class ToroidalBoundedBoard( board: List[ List[ Boolean ] ] ) extends BoundedBoar
     }
 }
 
-object BoardFactory {
+object MatrixBoardFactory {
     def bounded( height: Int, width: Int )( positions: (Int, Int)* ) = {
         val newBoard = Array.ofDim[ Boolean ]( height, width )
         positions foreach ( pos => newBoard( pos._1 )( pos._2 ) = true )
