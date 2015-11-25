@@ -2,7 +2,7 @@ package org.life
 
 import scala.collection.immutable.List
 
-abstract case class AbstractMatrixBackedBoard( board: List[ List[ Boolean ] ] ) {
+abstract case class AbstractMatrixBackedBoard[ B ]( board: List[ List[ Boolean ] ] ) {
     //    val board: List[ List[ Boolean ] ]
 //
     def apply( i: Int, j: Int ) = board( i )( j )
@@ -21,13 +21,16 @@ abstract case class AbstractMatrixBackedBoard( board: List[ List[ Boolean ] ] ) 
         else alive                         // survival
     }
 
-    def nextBoard( ): BoundedBoard = {
-        new BoundedBoard( board = pairWithIndexes( board )
+    def nextBoard( ): B = {
+        val nextBoard: List[ List[ Boolean ] ] = pairWithIndexes( board )
                 .map( row => row
                         .map( cell => cellNextState( cell._1, cell._2, cell._3 ) )
                         .toList )
-                .toList )
+                .toList
+        boardFor( nextBoard )
     }
+
+    protected def boardFor( nextBoard: List[ List[ Boolean ] ] ): B
 
     def pairWithIndexes( board: List[ List[ Boolean ] ] ) = {
         board.indices.map( i => board( i ).indices.map( j => (i, j, board( i )( j )) ) )
@@ -39,7 +42,7 @@ abstract case class AbstractMatrixBackedBoard( board: List[ List[ Boolean ] ] ) 
 }
 
 /** Represents a Game of Life board which is bounded by a destructive border. */
-class BoundedBoard( board: List[ List[ Boolean ] ] ) extends AbstractMatrixBackedBoard( board ) {
+class BoundedBoard( board: List[ List[ Boolean ] ] ) extends AbstractMatrixBackedBoard[ BoundedBoard ]( board ) {
     override def neighbors( i: Int, j: Int ) = {
         ( i - 1 to i + 1 ).filter( board.isDefinedAt )
                 .flatMap( ii => ( j - 1 to j + 1 ).filter( board( ii ).isDefinedAt )
@@ -48,10 +51,12 @@ class BoundedBoard( board: List[ List[ Boolean ] ] ) extends AbstractMatrixBacke
                 .map( coords => board( coords._1 )( coords._2 ) )
                 .toList
     }
+
+    override protected def boardFor( nextBoard: List[ List[ Boolean ] ] ): BoundedBoard = new BoundedBoard( nextBoard )
 }
 
 /** Represent a Game of Life board where the edges are considered connected top-to-bottom and side-to-side. */
-class ToroidalBoard( board: List[ List[ Boolean ] ] ) extends BoundedBoard( board ) {
+class ToroidalBoard( board: List[ List[ Boolean ] ] ) extends AbstractMatrixBackedBoard[ ToroidalBoard ]( board ) {
     override def neighbors( i: Int, j: Int ) = {
         ( i - 1 to i + 1 )
                 .flatMap( ii => ( j - 1 to j + 1 ).map( jj => (ii, jj) ) )
@@ -71,6 +76,8 @@ class ToroidalBoard( board: List[ List[ Boolean ] ] ) extends BoundedBoard( boar
         // no change
         else (i, j)
     }
+
+    override protected def boardFor( nextBoard: List[ List[ Boolean ] ] ): ToroidalBoard = new ToroidalBoard( nextBoard )
 }
 
 object MatrixBoardFactory {
