@@ -37,7 +37,7 @@ abstract case class AbstractMatrixBackedBoard[ B ]( board: List[ List[ Boolean ]
     }
 
     override def toString = {
-        board.flatMap( row => row.map( cell => if ( cell ) "X " else ". " ) :+ "\n" ).mkString
+        board.map( row => row.map( cell => if ( cell ) "X " else ". " ).mkString ).mkString( "\n" )
     }
 }
 
