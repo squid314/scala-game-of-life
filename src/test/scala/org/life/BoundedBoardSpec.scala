@@ -5,7 +5,6 @@ import org.scalatest._
 
 class BoundedBoardSpec extends FlatSpec with Matchers {
     "Board" should "be able to find a specific cell" in {
-        println( "testing!!!" )
         assert( center( 0, 0 ) == false )
         assert( center( 0, 1 ) == false )
         assert( center( 0, 2 ) == false )
