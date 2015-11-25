@@ -50,6 +50,7 @@ class BoundedBoard( board: List[ List[ Boolean ] ] ) extends AbstractMatrixBacke
     }
 }
 
+/** Represent a Game of Life board where the edges are considered connected top-to-bottom and side-to-side. */
 class ToroidalBoundedBoard( board: List[ List[ Boolean ] ] ) extends BoundedBoard( board ) {
     override def neighbors( i: Int, j: Int ) = {
         ( i - 1 to i + 1 )
