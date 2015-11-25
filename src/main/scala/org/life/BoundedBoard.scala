@@ -3,7 +3,7 @@ package org.life
 import scala.collection.immutable.List
 
 abstract case class AbstractMatrixBackedBoard( board: List[ List[ Boolean ] ] ) {
-//    val board: List[ List[ Boolean ] ]
+    //    val board: List[ List[ Boolean ] ]
 //
     def apply( i: Int, j: Int ) = board( i )( j )
 
@@ -44,16 +44,44 @@ class BoundedBoard( board: List[ List[ Boolean ] ] ) extends AbstractMatrixBacke
         ( i - 1 to i + 1 ).filter( board.isDefinedAt )
                 .flatMap( ii => ( j - 1 to j + 1 ).filter( board( ii ).isDefinedAt )
                         .map( jj => (ii, jj) ) )
-                .filter( pair => pair._1 != i || pair._2 != j )
-                .map( pair => board( pair._1 )( pair._2 ) )
+                .filter( coords => coords._1 != i || coords._2 != j )
+                .map( coords => board( coords._1 )( coords._2 ) )
                 .toList
     }
 }
 
-object BoundedBoardFactory {
-    def apply( height: Int, width: Int )( positions: (Int, Int)* ) = {
+class ToroidalBoundedBoard( board: List[ List[ Boolean ] ] ) extends BoundedBoard( board ) {
+    override def neighbors( i: Int, j: Int ) = {
+        ( i - 1 to i + 1 )
+                .flatMap( ii => ( j - 1 to j + 1 ).map( jj => (ii, jj) ) )
+                .filter( coords => coords._1 != i || coords._2 != j )
+                .map( coords => fixCoords( coords._1, coords._2 ) )
+                .map( coords => board( coords._1 )( coords._2 ) )
+                .toList
+    }
+
+    def fixCoords( i: Int, j: Int ): (Int, Int) = {
+        // loop on x-axis
+        if ( i < 0 ) fixCoords( i + board.length, j )
+        else if ( i >= board.length ) fixCoords( i - board.length, j )
+        // loop on y-axis
+        else if ( j < 0 ) fixCoords( i, j + board.length )
+        else if ( j >= board.length ) fixCoords( i, j - board.length )
+        // no change
+        else (i, j)
+    }
+}
+
+object BoardFactory {
+    def bounded( height: Int, width: Int )( positions: (Int, Int)* ) = {
         val newBoard = Array.ofDim[ Boolean ]( height, width )
         positions foreach ( pos => newBoard( pos._1 )( pos._2 ) = true )
         new BoundedBoard( board = newBoard.map( _.toList ).toList )
+    }
+
+    def toroid( height: Int, width: Int )( positions: (Int, Int)* ) = {
+        val newBoard = Array.ofDim[ Boolean ]( height, width )
+        positions foreach ( pos => newBoard( pos._1 )( pos._2 ) = true )
+        new ToroidalBoundedBoard( board = newBoard.map( _.toList ).toList )
     }
 }

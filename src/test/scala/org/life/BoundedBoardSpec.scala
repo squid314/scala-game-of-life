@@ -1,8 +1,7 @@
 package org.life
 
+import org.life.BoardFactory.bounded
 import org.scalatest._
-import scala.collection.immutable.List
-import org.life.BoundedBoardFactory.{apply => genBoard}
 
 class BoundedBoardSpec extends FlatSpec with Matchers {
     "Board" should "be able to find a specific cell" in {
@@ -83,11 +82,11 @@ class BoundedBoardSpec extends FlatSpec with Matchers {
         assert( blinkerHorizontal.nextBoard() == blinkerVertical )
     }
 
-    val emptyBoard = genBoard( 3, 3 )( )
-    val center = genBoard( 3, 3 )( (1, 1) )
-    val corner3 = genBoard( 3, 3 )( (0, 0), (0, 2), (2, 0) )
-    val blinkerHorizontal = genBoard( 3, 3 )( (1, 0), (1, 1), (1, 2) )
-    val blinkerVertical = genBoard( 3, 3 )( (0, 1), (1, 1), (2, 1) )
-    val box = genBoard( 3, 3 )( (1, 1), (1, 2), (2, 1), (2, 2) )
-    val full = genBoard( 3, 3 )( (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2) )
+    val emptyBoard = bounded( 3, 3 )( )
+    val center = bounded( 3, 3 )( (1, 1) )
+    val corner3 = bounded( 3, 3 )( (0, 0), (0, 2), (2, 0) )
+    val blinkerHorizontal = bounded( 3, 3 )( (1, 0), (1, 1), (1, 2) )
+    val blinkerVertical = bounded( 3, 3 )( (0, 1), (1, 1), (2, 1) )
+    val box = bounded( 3, 3 )( (1, 1), (1, 2), (2, 1), (2, 2) )
+    val full = bounded( 3, 3 )( (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2) )
 }
