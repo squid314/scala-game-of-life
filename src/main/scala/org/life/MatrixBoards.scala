@@ -51,7 +51,7 @@ class BoundedBoard( board: List[ List[ Boolean ] ] ) extends AbstractMatrixBacke
 }
 
 /** Represent a Game of Life board where the edges are considered connected top-to-bottom and side-to-side. */
-class ToroidalBoundedBoard( board: List[ List[ Boolean ] ] ) extends BoundedBoard( board ) {
+class ToroidalBoard( board: List[ List[ Boolean ] ] ) extends BoundedBoard( board ) {
     override def neighbors( i: Int, j: Int ) = {
         ( i - 1 to i + 1 )
                 .flatMap( ii => ( j - 1 to j + 1 ).map( jj => (ii, jj) ) )
@@ -83,6 +83,6 @@ object MatrixBoardFactory {
     def toroid( height: Int, width: Int )( positions: (Int, Int)* ) = {
         val newBoard = Array.ofDim[ Boolean ]( height, width )
         positions foreach ( pos => newBoard( pos._1 )( pos._2 ) = true )
-        new ToroidalBoundedBoard( board = newBoard.map( _.toList ).toList )
+        new ToroidalBoard( board = newBoard.map( _.toList ).toList )
     }
 }
