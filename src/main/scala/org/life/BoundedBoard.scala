@@ -40,7 +40,7 @@ abstract class AbstractMatrixBackedBoard {
 
 /** Represents a Game of Life board which is bounded by a destructive border. */
 case class BoundedBoard( board: List[ List[ Boolean ] ] ) extends AbstractMatrixBackedBoard {
-    def neighbors( i: Int, j: Int ) = {
+    override def neighbors( i: Int, j: Int ) = {
         ( i - 1 to i + 1 ).filter( board.isDefinedAt )
                 .flatMap( ii => ( j - 1 to j + 1 ).filter( board( ii ).isDefinedAt )
                         .map( jj => (ii, jj) ) )
