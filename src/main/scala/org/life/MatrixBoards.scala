@@ -24,7 +24,7 @@ abstract case class AbstractMatrixBackedBoard[ B ]( board: List[ List[ Boolean ]
     def nextBoard( ): B = {
         val nextBoard: List[ List[ Boolean ] ] = pairWithIndexes( board )
                 .map( row => row
-                        .map( cell => cellNextState( cell._1, cell._2, cell._3 ) )
+                        .map( { case (x, y, alive) => cellNextState( x, y, alive ) } )
                         .toList )
                 .toList
         boardFor( nextBoard )
@@ -43,12 +43,12 @@ abstract case class AbstractMatrixBackedBoard[ B ]( board: List[ List[ Boolean ]
 
 /** Represents a Game of Life board which is bounded by a destructive border. */
 class BoundedBoard( board: List[ List[ Boolean ] ] ) extends AbstractMatrixBackedBoard[ BoundedBoard ]( board ) {
-    override def neighbors( i: Int, j: Int ) = {
-        ( i - 1 to i + 1 ).filter( board.isDefinedAt )
-                .flatMap( ii => ( j - 1 to j + 1 ).filter( board( ii ).isDefinedAt )
-                        .map( jj => (ii, jj) ) )
-                .filter( coords => coords._1 != i || coords._2 != j )
-                .map( coords => board( coords._1 )( coords._2 ) )
+    override def neighbors( x0: Int, y0: Int ) = {
+        ( x0 - 1 to x0 + 1 )
+                .flatMap( x => ( y0 - 1 to y0 + 1 ).map( y => (x, y) ) )
+                .filter { case (x, y) => board.isDefinedAt( x ) && board( x ).isDefinedAt( y ) }
+                .filter { case (x, y) => x != x0 || y != y0 }
+                .map { case (x, y) => board( x )( y ) }
                 .toList
     }
 
@@ -57,24 +57,24 @@ class BoundedBoard( board: List[ List[ Boolean ] ] ) extends AbstractMatrixBacke
 
 /** Represent a Game of Life board where the edges are considered connected top-to-bottom and side-to-side. */
 class ToroidalBoard( board: List[ List[ Boolean ] ] ) extends AbstractMatrixBackedBoard[ ToroidalBoard ]( board ) {
-    override def neighbors( i: Int, j: Int ) = {
-        ( i - 1 to i + 1 )
-                .flatMap( ii => ( j - 1 to j + 1 ).map( jj => (ii, jj) ) )
-                .filter( coords => coords._1 != i || coords._2 != j )
-                .map( coords => fixCoords( coords._1, coords._2 ) )
-                .map( coords => board( coords._1 )( coords._2 ) )
+    override def neighbors( x0: Int, y0: Int ) = {
+        ( x0 - 1 to x0 + 1 )
+                .flatMap( x => ( y0 - 1 to y0 + 1 ).map( y => (x, y) ) )
+                .filter { case (x, y) => x != x0 || y != y0 }
+                .map { case (x, y) => fixCoords( x, y ) }
+                .map { case (x, y) => board( x )( y ) }
                 .toList
     }
 
-    def fixCoords( i: Int, j: Int ): (Int, Int) = {
+    def fixCoords( x: Int, y: Int ): (Int, Int) = {
         // loop on x-axis
-        if ( i < 0 ) fixCoords( i + board.length, j )
-        else if ( i >= board.length ) fixCoords( i - board.length, j )
+        if ( x < 0 ) fixCoords( x + board.length, y )
+        else if ( x >= board.length ) fixCoords( x - board.length, y )
         // loop on y-axis
-        else if ( j < 0 ) fixCoords( i, j + board.length )
-        else if ( j >= board.length ) fixCoords( i, j - board.length )
+        else if ( y < 0 ) fixCoords( x, y + board( x ).length )
+        else if ( y >= board.length ) fixCoords( x, y - board( x ).length )
         // no change
-        else (i, j)
+        else (x, y)
     }
 
     override protected def boardFor( nextBoard: List[ List[ Boolean ] ] ): ToroidalBoard = new ToroidalBoard( nextBoard )
@@ -83,13 +83,13 @@ class ToroidalBoard( board: List[ List[ Boolean ] ] ) extends AbstractMatrixBack
 object MatrixBoardFactory {
     def bounded( height: Int, width: Int )( positions: (Int, Int)* ) = {
         val newBoard = Array.ofDim[ Boolean ]( height, width )
-        positions foreach ( pos => newBoard( pos._1 )( pos._2 ) = true )
+        positions foreach { case (x, y) => newBoard( x )( y ) = true }
         new BoundedBoard( board = newBoard.map( _.toList ).toList )
     }
 
     def toroid( height: Int, width: Int )( positions: (Int, Int)* ) = {
         val newBoard = Array.ofDim[ Boolean ]( height, width )
-        positions foreach ( pos => newBoard( pos._1 )( pos._2 ) = true )
+        positions foreach { case (x, y) => newBoard( x )( y ) = true }
         new ToroidalBoard( board = newBoard.map( _.toList ).toList )
     }
 }
