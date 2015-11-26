@@ -7,18 +7,30 @@ object Main {
 }
 
 object ConwaysGameOfLifeRunner extends App {
+    def randomPositions( height: Int, width: Int, populationRatio: Double ) = {
+        ( 0 until height ).flatMap( i => ( 0 until width ).map( j => (i, j) ) )
+                .collect { case coords: Coordinate if Math.random < populationRatio => coords }
+    }
+
+    def offsetBy( dx: Int, dy: Int )( positions: Traversable[ Coordinate ] ) = {
+        positions map ( coord => (coord._1 + dx, coord._2 + dy) )
+    }
+
+    def square = List( (0, 0), (0, 1), (1, 0), (1, 1) )
+    def blinkerH = List( (0, 0), (0, 1), (0, 2) )
+    def blinkerV = List( (0, 0), (1, 0), (2, 0) )
+
     val height = 50
     val width = 80
-    val lifeChance = 0.3333
-    val initialPositions = ( 0 until height ).flatMap( i => ( 0 until width ).map( j => (i, j) ) )
-            .collect { case coords: (Int, Int) if Math.random( ) < lifeChance => coords }
+    val populationRatio = 0.3333
+    val initialPositions: Seq[ Coordinate ] = randomPositions( height, width, populationRatio )
 
-    val initToroid = MatrixBoardFactory.toroid( height, width )( initialPositions: _* )
-    val toroidStream: Stream[ ToroidalBoard ] =
-        initToroid #:: toroidStream.map( _.nextBoard( ) )
+    val initToroid = MatrixBoardFactory.bounded( height, width )( initialPositions: _* )
+    val boardStream: Stream[ BoundedBoard ] =
+        initToroid #:: boardStream.map( _.nextBoard( ) )
 
     val duration = 100000
-    toroidStream
+    boardStream
             .sliding( 3 )
             .takeWhile( items => {
                 val prevPrev = items.head
@@ -30,9 +42,8 @@ object ConwaysGameOfLifeRunner extends App {
             .take( duration )
             .map( _.tail.tail.head ) // get back to the board we care about (note that we lose printout of the initial board and the first generation; whatever)
             .zipWithIndex
-            .foreach( pair => {
-                val (t, index: Int) = pair
-                println //
+            .foreach( { case (t, index) =>
+                println
                 println( t )
                 println( index )
                 try {

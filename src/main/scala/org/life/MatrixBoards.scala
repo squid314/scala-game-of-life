@@ -3,8 +3,6 @@ package org.life
 import scala.collection.immutable.List
 
 abstract case class AbstractMatrixBackedBoard[ B ]( board: List[ List[ Boolean ] ] ) {
-    //    val board: List[ List[ Boolean ] ]
-//
     def apply( i: Int, j: Int ) = board( i )( j )
 
     def neighbors( i: Int, j: Int ): List[ Boolean ]
@@ -66,7 +64,7 @@ class ToroidalBoard( board: List[ List[ Boolean ] ] ) extends AbstractMatrixBack
                 .toList
     }
 
-    def fixCoords( x: Int, y: Int ): (Int, Int) = {
+    def fixCoords( x: Int, y: Int ): Coordinate = {
         // loop on x-axis
         if ( x < 0 ) fixCoords( x + board.length, y )
         else if ( x >= board.length ) fixCoords( x - board.length, y )
@@ -81,13 +79,13 @@ class ToroidalBoard( board: List[ List[ Boolean ] ] ) extends AbstractMatrixBack
 }
 
 object MatrixBoardFactory {
-    def bounded( height: Int, width: Int )( positions: (Int, Int)* ) = {
+    def bounded( height: Int, width: Int )( positions: Coordinate* ) = {
         val newBoard = Array.ofDim[ Boolean ]( height, width )
         positions foreach { case (x, y) => newBoard( x )( y ) = true }
         new BoundedBoard( board = newBoard.map( _.toList ).toList )
     }
 
-    def toroid( height: Int, width: Int )( positions: (Int, Int)* ) = {
+    def toroid( height: Int, width: Int )( positions: Coordinate* ) = {
         val newBoard = Array.ofDim[ Boolean ]( height, width )
         positions foreach { case (x, y) => newBoard( x )( y ) = true }
         new ToroidalBoard( board = newBoard.map( _.toList ).toList )
