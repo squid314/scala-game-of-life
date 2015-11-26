@@ -12,10 +12,6 @@ object ConwaysGameOfLifeRunner extends App {
                 .collect { case coords: Coordinate if Math.random < populationRatio => coords }
     }
 
-    def offsetBy( dx: Int, dy: Int )( positions: Traversable[ Coordinate ] ) = {
-        positions map ( coord => (coord._1 + dx, coord._2 + dy) )
-    }
-
     def square = List( (0, 0), (0, 1), (1, 0), (1, 1) )
     def blinkerH = List( (0, 0), (0, 1), (0, 2) )
     def blinkerV = List( (0, 0), (1, 0), (2, 0) )
