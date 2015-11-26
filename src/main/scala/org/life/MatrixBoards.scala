@@ -70,7 +70,7 @@ class ToroidalBoard( board: List[ List[ Boolean ] ] ) extends AbstractMatrixBack
         else if ( x >= board.length ) fixCoords( x - board.length, y )
         // loop on y-axis
         else if ( y < 0 ) fixCoords( x, y + board( x ).length )
-        else if ( y >= board.length ) fixCoords( x, y - board( x ).length )
+        else if ( y >= board( x ).length ) fixCoords( x, y - board( x ).length )
         // no change
         else (x, y)
     }
