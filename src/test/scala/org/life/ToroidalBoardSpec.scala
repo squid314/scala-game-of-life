@@ -8,17 +8,17 @@ class ToroidalBoardSpec extends FlatSpec with Matchers {
         assert( emptyBoard.nextBoard( ) == emptyBoard )
     }
 
-    "Board" should "maintain box layouts in the center and the corners" in {
+    it should "maintain box layouts in the center and the corners" in {
         assert( squareCenter.nextBoard( ) == squareCenter )
         assert( squareCorner.nextBoard( ) == squareCorner )
     }
 
-    "Board" should "flip-flop between blinkers" in {
+    it should "flip-flop between blinkers" in {
         assert( blinkerHorizontal.nextBoard( ) == blinkerVertical )
         assert( blinkerVertical.nextBoard( ) == blinkerHorizontal )
     }
 
-    "Board" should "maintin \"infinite\" diagonal" in {
+    it should "maintain \"infinite\" diagonal" in {
         assert( diagonal.nextBoard( ) == diagonal )
     }
 
