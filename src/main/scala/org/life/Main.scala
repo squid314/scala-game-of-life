@@ -21,9 +21,9 @@ object ConwaysGameOfLifeRunner extends App {
     val populationRatio = 0.3333
     val initialPositions: Seq[ Coordinate ] = randomPositions( height, width, populationRatio )
 
-    val initToroid = MatrixBoardFactory.bounded( height, width )( initialPositions: _* )
-    val boardStream: Stream[ BoundedBoard ] =
-        initToroid #:: boardStream.map( _.nextBoard( ) )
+    val initBoard = MatrixBoardFactory.toroid( height, width )( initialPositions: _* )
+    // this type cannot be specified explicitly lest we require updating it each time we change from toroid to bounded
+    val boardStream = Stream.iterate( initBoard )( _.nextBoard( ) )
 
     val duration = 100000
     boardStream
