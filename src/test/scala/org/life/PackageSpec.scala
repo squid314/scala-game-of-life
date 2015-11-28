@@ -3,13 +3,13 @@ package org.life
 import org.scalatest.FlatSpec
 
 class PackageSpec extends FlatSpec {
-    val none = List( )
-    val zeroZero = List( (0, 0) )
+    val none: Positions = Set( )
+    val zeroZero: Positions = Set( (0, 0) )
     // arrow pattern:
     // X .
     // . X
     // X .
-    val arrow = List( (0, 0), (1, 1), (2, 0) )
+    val arrow: Positions = Set( (0, 0), (1, 1), (2, 0) )
 
     behavior of "offsetBy"
 
@@ -28,17 +28,17 @@ class PackageSpec extends FlatSpec {
     it should "move positions horizontally" in {
         val horiz = offsetBy( 0, 1 ) _
         assert( horiz( none ) == none )
-        assert( horiz( zeroZero ) == List( (0, 1) ) )
-        assert( horiz( square ) == List( (0, 1), (0, 2), (1, 1), (1, 2) ) )
-        assert( horiz( blinker ) == List( (0, 1), (0, 2), (0, 3) ) )
+        assert( horiz( zeroZero ) == Set( (0, 1) ) )
+        assert( horiz( square ) == Set( (0, 1), (0, 2), (1, 1), (1, 2) ) )
+        assert( horiz( blinker ) == Set( (0, 1), (0, 2), (0, 3) ) )
     }
 
     it should "move positions vertically" in {
         val horiz = offsetBy( 1, 0 ) _
         assert( horiz( none ) == none )
-        assert( horiz( zeroZero ) == List( (1, 0) ) )
-        assert( horiz( square ) == List( (1, 0), (1, 1), (2, 0), (2, 1) ) )
-        assert( horiz( blinker ) == List( (1, 0), (1, 1), (1, 2) ) )
+        assert( horiz( zeroZero ) == Set( (1, 0) ) )
+        assert( horiz( square ) == Set( (1, 0), (1, 1), (2, 0), (2, 1) ) )
+        assert( horiz( blinker ) == Set( (1, 0), (1, 1), (1, 2) ) )
     }
 
     behavior of "flipHorizontally"
@@ -51,6 +51,6 @@ class PackageSpec extends FlatSpec {
     }
 
     it should "be able to flip the arrow" in {
-        assert( flipHorizontally( arrow ) == List( (0, 1), (1, 0), (2, 1) ) )
+        assert( flipHorizontally( arrow ) == Set( (0, 1), (1, 0), (2, 1) ) )
     }
 }

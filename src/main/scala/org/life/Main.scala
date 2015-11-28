@@ -10,6 +10,7 @@ object ConwaysGameOfLifeRunner extends App {
     def randomPositions( height: Int, width: Int, populationRatio: Double ) = {
         ( 0 until height ).flatMap( i => ( 0 until width ).map( j => (i, j) ) )
                 .collect { case coord: Coordinate if Math.random < populationRatio => coord }
+                .toSet
     }
 
     val height = 50
@@ -17,7 +18,7 @@ object ConwaysGameOfLifeRunner extends App {
     val populationRatio = 0.3333
     val initialPositions: Positions = randomPositions( height, width, populationRatio )
 
-    val initBoard = MatrixBoardFactory.toroid( height, width )( initialPositions: _* )
+    val initBoard = MatrixBoardFactory.toroid( height, width )( initialPositions )
     // this type cannot be specified explicitly lest we require updating it each time we change from toroid to bounded
     val boardStream = Stream.iterate( initBoard )( _.nextBoard( ) )
 
