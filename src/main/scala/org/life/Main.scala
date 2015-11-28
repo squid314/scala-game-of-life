@@ -19,7 +19,7 @@ object ConwaysGameOfLifeRunner extends App {
     val height = 50
     val width = 80
     val populationRatio = 0.3333
-    val initialPositions: Seq[ Coordinate ] = randomPositions( height, width, populationRatio )
+    val initialPositions: Positions = randomPositions( height, width, populationRatio )
 
     val initBoard = MatrixBoardFactory.toroid( height, width )( initialPositions: _* )
     // this type cannot be specified explicitly lest we require updating it each time we change from toroid to bounded
@@ -38,7 +38,7 @@ object ConwaysGameOfLifeRunner extends App {
             .take( duration )
             .map( _.tail.tail.head ) // get back to the board we care about (note that we lose printout of the initial board and the first generation; whatever)
             .zipWithIndex
-            .foreach( { case (t, index) =>
+            .foreach { case (t, index) =>
                 println
                 println( t )
                 println( index )
@@ -48,5 +48,5 @@ object ConwaysGameOfLifeRunner extends App {
                 catch {
                     case e: InterruptedException => println( "error" )
                 }
-            } )
+            }
 }
