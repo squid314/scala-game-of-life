@@ -9,7 +9,7 @@ object Main {
 object ConwaysGameOfLifeRunner extends App {
     def randomPositions( height: Int, width: Int, populationRatio: Double ) = {
         ( 0 until height ).flatMap( i => ( 0 until width ).map( j => (i, j) ) )
-                .collect { case coords: Coordinate if Math.random < populationRatio => coords }
+                .collect { case coord: Coordinate if Math.random < populationRatio => coord }
     }
 
     def square = List( (0, 0), (0, 1), (1, 0), (1, 1) )
