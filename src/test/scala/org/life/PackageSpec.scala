@@ -5,6 +5,11 @@ import org.scalatest.FlatSpec
 class PackageSpec extends FlatSpec {
     val none = List( )
     val zeroZero = List( (0, 0) )
+    // arrow pattern:
+    // X .
+    // . X
+    // X .
+    val arrow = List( (0, 0), (1, 1), (2, 0) )
 
     behavior of "offsetBy"
 
@@ -41,7 +46,11 @@ class PackageSpec extends FlatSpec {
     it should "not create positions" in {
         assert( flipHorizontally( none ) == none )
         assert( flipHorizontally( zeroZero ) == zeroZero )
+        assert( flipHorizontally( square ) == square )
+        assert( flipHorizontally( blinker ) == blinker )
     }
 
-//    it should ""
+    it should "be able to flip the arrow" in {
+        assert( flipHorizontally( arrow ) == List( (0, 1), (1, 0), (2, 1) ) )
+    }
 }

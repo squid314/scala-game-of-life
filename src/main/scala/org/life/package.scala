@@ -14,7 +14,9 @@ package object life {
     }
 
     /**
-      * Takes a collection of positions and flips them horzontally between 0 and the max y in the sequence.
+      * Takes a collection of positions and flips them horzontally between 0 and the max(y) in the sequence. Note that
+      * flipping twice is not guaranteed to return the pattern to its original state due to the calculation of max(y)
+      * each time.
       * @param positions the positions to flip
       * @return the flipped positions
       */
@@ -23,7 +25,9 @@ package object life {
     }
 
     /**
-      * Takes a collection of positions and flips them vertically between 0 and the max x in the sequence.
+      * Takes a collection of positions and flips them vertically between 0 and the max(x) in the sequence. Note that
+      * flipping twice is not guaranteed to return the pattern to its original state due to the calculation of max(x)
+      * each time.
       * @param positions the positions to flip
       * @return the flipped positions
       */
