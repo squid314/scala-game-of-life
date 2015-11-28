@@ -12,10 +12,6 @@ object ConwaysGameOfLifeRunner extends App {
                 .collect { case coord: Coordinate if Math.random < populationRatio => coord }
     }
 
-    def square = List( (0, 0), (0, 1), (1, 0), (1, 1) )
-    def blinkerH = List( (0, 0), (0, 1), (0, 2) )
-    def blinkerV = List( (0, 0), (1, 0), (2, 0) )
-
     val height = 50
     val width = 80
     val populationRatio = 0.3333
