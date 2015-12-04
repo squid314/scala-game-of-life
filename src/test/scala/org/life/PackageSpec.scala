@@ -38,19 +38,19 @@ class PackageSpec extends FlatSpec {
 
     behavior of "maxs"
     it should "not find anything in an empty set" in {
-        assert( maxs( none ) ==(None, None) )
+        assert( maxs( none ) == None )
     }
     it should "find the single 0,0 position" in {
-        assert( maxs( zeroZero ) ==(Some( 0 ), Some( 0 )) )
+        assert( maxs( zeroZero ) == Some( (0, 0) ) )
     }
     it should "find the single 5,5 position" in {
-        assert( maxs( Set( (5, 5) ) ) ==(Some( 5 ), Some( 5 )) )
+        assert( maxs( Set( (5, 5) ) ) == Some( (5, 5) ) )
     }
     it should "find the max of the common shapes" in {
-        assert( maxs( square ) ==(Some( 1 ), Some( 1 )) )
-        assert( maxs( glider ) ==(Some( 2 ), Some( 2 )) )
-        assert( maxs( arrow ) ==(Some( 2 ), Some( 1 )) )
-        assert( maxs( cross ) ==(Some( 3 ), Some( 2 )) )
+        assert( maxs( square ) == Some( (1, 1) ) )
+        assert( maxs( glider ) == Some( (2, 2) ) )
+        assert( maxs( arrow ) == Some( (2, 1) ) )
+        assert( maxs( cross ) == Some( (3, 2) ) )
     }
 
     behavior of "flipHorizontally"

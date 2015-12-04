@@ -94,8 +94,11 @@ package object life {
       * @return the flipped positions
       */
     def flipHorizontally( positions: Positions ) = {
-        val maxY: Option[ Int ] = positions map { case (x, y) => y } reduceOption Math.max
-        positions map { case (x, y) => (x, maxY.get - y) }
+        maxs( positions ) match {
+            case None => positions
+            case Some( (_, maxy) ) =>
+                positions map { case (x, y) => (x, maxy - y) }
+        }
     }
 
     /**
@@ -106,8 +109,11 @@ package object life {
       * @return the flipped positions
       */
     def flipVertically( positions: Positions ) = {
-        val maxX: Option[ Int ] = positions map { case (x, y) => x } reduceOption Math.max
-        positions map { case (x, y) => (maxX.get - x, y) }
+        maxs( positions ) match {
+            case None => positions
+            case Some( (maxx, _) ) =>
+                positions map { case (x, y) => (maxx - x, y) }
+        }
     }
 
     def maxs( positions: Positions ) = {
@@ -116,11 +122,7 @@ package object life {
             val (x, y) = next
             (Math.max( maxx, x ), Math.max( maxy, y ))
         }
-        } map { ( maxs ) => {
-            val (maxx, maxy) = maxs
-            (Some( maxx ), Some( maxy ))
         }
-        } getOrElse ( (None, None) )
     }
 
     /**
@@ -134,7 +136,6 @@ package object life {
     def rotate( count: Int )( positions: Positions ): Positions = count match {
         case count: Int if count == 0 => positions
         case count: Int if count == 1 => {
-            val (maxX, maxY) = maxs( positions )
             positions
         }
         case count: Int if count == 2 => positions
