@@ -13,16 +13,19 @@ object ConwaysGameOfLifeRunner extends App {
                 .toSet
     }
 
-    val height = 50
-    val width = 80
+    val (height, width) = (50, 80)
     val populationRatio = 0.3333
-    val initialPositions: Positions = randomPositions( height, width, populationRatio )
+    val initialPositions: Positions =
+        offsetBy( 10, 10 )( blinker )
+//        randomPositions( height, width, populationRatio )
 
     val initBoard = MatrixBoardFactory.toroid( height, width )( initialPositions )
     // this type cannot be specified explicitly lest we require updating it each time we change from toroid to bounded
     val boardStream = Stream.iterate( initBoard )( _.nextBoard( ) )
 
-    val duration = 100000
+    val (short, medium, long, epic) = (20, 150, 1125, 8437)
+    val (numbing, slow, peppy, fast) = (500, 250, 125, 62)
+    val (duration, delay) = (medium, fast)
     boardStream
             .sliding( 3 )
             .takeWhile( items => {
@@ -40,7 +43,7 @@ object ConwaysGameOfLifeRunner extends App {
                 println( t )
                 println( index )
                 try {
-                    Thread.sleep( 100 )
+                    Thread.sleep( delay )
                 }
                 catch {
                     case e: InterruptedException => println( "error" )
