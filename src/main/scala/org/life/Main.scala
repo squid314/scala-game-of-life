@@ -7,11 +7,12 @@ object Main {
 }
 
 object ConwaysGameOfLifeRunner extends App {
-    def randomPositions( height: Int, width: Int, populationRatio: Double ) = {
-        ( 0 until height ).flatMap( i => ( 0 until width ).map( j => (i, j) ) )
-                .collect { case coord: Coordinate if Math.random < populationRatio => coord }
-                .toSet
-    }
+    def allPositions( height: Int, width: Int ): Positions = {
+        for {x <- 0 until height; y <- 0 until width} yield (x, y)
+    }.toSet
+    def randomPositions( height: Int, width: Int, populationRatio: Double ): Positions =
+        allPositions( height, width )
+                .filter( e => Math.random < populationRatio )
 
     val (height, width) = (50, 80)
     val populationRatio = 0.3333
