@@ -36,6 +36,17 @@ class PackageSpec extends FlatSpec {
         assert( horiz( blinker ) == Set( (1, 0), (1, 1), (1, 2) ) )
     }
 
+    behavior of "maxs"
+    it should "not find anything in an empty set" in {
+        assert( maxs( none ) ==(None, None) )
+    }
+    it should "find the single 0,0 position" in {
+        assert( maxs( zeroZero ) ==(Some( 0 ), Some( 0 )) )
+    }
+    it should "find the single 5,5 position" in {
+        assert( maxs( Set( (5, 5) ) ) ==(Some( 5 ), Some( 5 )) )
+    }
+
     behavior of "flipHorizontally"
     it should "not create positions" in {
         assert( flipHorizontally( none ) == none )
@@ -68,5 +79,37 @@ class PackageSpec extends FlatSpec {
     }
     it should "be able to flip the bird" in {
         assert( flipVertically( bird ) == birdFlippedVertically )
+    }
+
+    behavior of "rotate"
+    it should "not create positions" in {
+        assert( rotate( 0 )( none ) == none )
+        assert( rotate( 0 )( zeroZero ) == zeroZero )
+        assert( rotate( 0 )( square ) == square )
+        assert( rotate( 0 )( blinker ) == blinker )
+        assert( rotate( 0 )( arrow ) == arrow )
+        assert( rotate( 0 )( cross ) == cross )
+        assert( rotate( 0 )( bird ) == bird )
+    }
+    it should "safely rotate objects which are rotationally identical" in {
+        assert( rotate( 0 )( none ) == none )
+        assert( rotate( 1 )( none ) == none )
+        assert( rotate( 2 )( none ) == none )
+        assert( rotate( 3 )( none ) == none )
+        assert( rotate( 0 )( square ) == square )
+        assert( rotate( 1 )( square ) == square )
+        assert( rotate( 2 )( square ) == square )
+        assert( rotate( 3 )( square ) == square )
+
+        assert( rotate( 0 )( blinker ) == blinker )
+        assert( rotate( 2 )( blinker ) == blinker )
+    }
+    ignore should "rotate items clockwise" in {
+        assert( rotate( 1 )( arrow ) == Set( (0, 0), (0, 2), (1, 1) ) )
+        assert( rotate( 1 )( cross ) == Set( (0, 2), (1, 0), (1, 1), (1, 2), (1, 3), (2, 2) ) )
+    }
+    ignore should "rotate items counterclockwise" in {
+        assert( rotate( 1 )( arrow ) == Set( (1, 0), (1, 2), (0, 1) ) )
+        assert( rotate( 1 )( cross ) == Set( (0, 1), (1, 0), (1, 1), (1, 2), (1, 3), (2, 1) ) )
     }
 }

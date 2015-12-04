@@ -87,7 +87,7 @@ package object life {
     }
 
     /**
-      * Takes a collection of positions and flips them horzontally between 0 and the max(y) in the sequence. Note that
+      * Takes a collection of positions and flips them horizontally between 0 and the max(y) in the sequence. Note that
       * flipping twice is not guaranteed to return the pattern to its original state due to the calculation of max(y)
       * each time.
       * @param positions the positions to flip
@@ -110,6 +110,19 @@ package object life {
         positions map { case (x, y) => (maxX.get - x, y) }
     }
 
+    def maxs( positions: Positions ) = {
+        positions.reduceOption { ( maxs, next ) => {
+            val (maxx, maxy) = maxs
+            val (x, y) = next
+            (Math.max( maxx, x ), Math.max( maxy, y ))
+        }
+        } map { ( maxs ) => {
+            val (maxx, maxy) = maxs
+            (Some( maxx ), Some( maxy ))
+        }
+        } getOrElse ( (None, None) )
+    }
+
     /**
       * Rotates positions clockwise in 90 degree increments `count` times. This is only applied for counts of 0, 1, 2,
       * and 3. The rotation is applied with respect to `(0, 0)` such that all positions stay within the
@@ -118,5 +131,17 @@ package object life {
       * @param positions positions to rotate
       * @return the new positions
       */
-    def rotate( count: Int )( positions: Positions ) = ???
+    def rotate( count: Int )( positions: Positions ): Positions = count match {
+        case count: Int if count == 0 => positions
+        case count: Int if count == 1 => {
+            val (maxX, maxY) = maxs( positions )
+            positions
+        }
+        case count: Int if count == 2 => positions
+        case count: Int if count == 3 => positions
+    }
+
+//    def r2( count: Int ) = {
+//        case count: Int if count == 0 => ( positions: Positions ) => positions
+//    }
 }
