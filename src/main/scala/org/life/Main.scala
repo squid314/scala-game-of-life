@@ -7,9 +7,9 @@ object Main {
 }
 
 object ConwaysGameOfLifeRunner extends App {
-    def allPositions( height: Int, width: Int ): Positions = {
+    def allPositions( height: Int, width: Int ): Positions = Positions( ( ) => {
         for {x <- 0 until height; y <- 0 until width} yield (x, y)
-    }.toSet
+    } )
 
     def randomPositions( height: Int, width: Int, populationRatio: Double ): Positions =
         allPositions( height, width )

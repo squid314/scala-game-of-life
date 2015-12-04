@@ -82,10 +82,10 @@ class BoundedBoardSpec extends FlatSpec with Matchers {
     }
 
     val emptyBoard = bounded( 3, 3 )( )
-    val center = bounded( 3, 3 )( Set( (1, 1) ) )
-    val corner3 = bounded( 3, 3 )( Set( (0, 0), (0, 2), (2, 0) ) )
-    val blinkerHorizontal = bounded( 3, 3 )( Set( (1, 0), (1, 1), (1, 2) ) )
-    val blinkerVertical = bounded( 3, 3 )( Set( (0, 1), (1, 1), (2, 1) ) )
-    val box = bounded( 3, 3 )( Set( (1, 1), (1, 2), (2, 1), (2, 2) ) )
-    val full = bounded( 3, 3 )( Set( (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2) ) )
+    val center = bounded( 3, 3 )( Positions( (1, 1) ) )
+    val corner3 = bounded( 3, 3 )( Positions( (0, 0), (0, 2), (2, 0) ) )
+    val blinkerHorizontal = bounded( 3, 3 )( Positions( (1, 0), (1, 1), (1, 2) ) )
+    val blinkerVertical = bounded( 3, 3 )( Positions( (0, 1), (1, 1), (2, 1) ) )
+    val box = bounded( 3, 3 )( Positions( (1, 1), (1, 2), (2, 1), (2, 2) ) )
+    val full = bounded( 3, 3 )( Positions( (0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2) ) )
 }

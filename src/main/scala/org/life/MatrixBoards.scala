@@ -79,13 +79,13 @@ class ToroidalBoard( board: List[ List[ Boolean ] ] ) extends AbstractMatrixBack
 }
 
 object MatrixBoardFactory {
-    def bounded( height: Int, width: Int )( positions: Positions = Set() ) = {
+    def bounded( height: Int, width: Int )( positions: Positions = Positions() ) = {
         val newBoard = Array.ofDim[ Boolean ]( height, width )
         positions foreach { case (x, y) => newBoard( x )( y ) = true }
         new BoundedBoard( board = newBoard.map( _.toList ).toList )
     }
 
-    def toroid( height: Int, width: Int )( positions: Positions = Set() ) = {
+    def toroid( height: Int, width: Int )( positions: Positions = Positions() ) = {
         val newBoard = Array.ofDim[ Boolean ]( height, width )
         positions foreach { case (x, y) => newBoard( x )( y ) = true }
         new ToroidalBoard( board = newBoard.map( _.toList ).toList )

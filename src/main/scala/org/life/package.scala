@@ -2,13 +2,19 @@ package org
 
 package object life {
     type Coordinate = (Int, Int)
-    type Positions = Set[ Coordinate ]
+    type Positions = Seq[ Coordinate ]
+
+    object Positions {
+        def apply( positions: Coordinate* ) = positions.toSeq
+
+        def apply( f: () => Traversable[ Coordinate ] ) = f( ).toSeq
+    }
 
     // common shapes
-    val square: Positions = Set( (0, 0), (0, 1), (1, 0), (1, 1) )
-    val blinker: Positions = Set( (0, 0), (0, 1), (0, 2) )
-    val glider: Positions = Set( (0, 1), (1, 2), (2, 0), (2, 1), (2, 2) )
-    val lwss: Positions = Set(
+    val square: Positions = Positions( (0, 0), (0, 1), (1, 0), (1, 1) )
+    val blinker: Positions = Positions( (0, 0), (0, 1), (0, 2) )
+    val glider: Positions = Positions( (0, 1), (1, 2), (2, 0), (2, 1), (2, 2) )
+    val lwss: Positions = Positions(
         /*           */ (0, 2), (0, 3),
         (1, 0), (1, 1), /*   */ (1, 3), (1, 4),
         (2, 0), (2, 1), (2, 2), (2, 3),
@@ -25,7 +31,7 @@ package object life {
     // 7 .......... .O...O.... .......... ..........
     // 8 .......... ..OO...... .......... ..........
     /** shoots gliders at v=(1,1) */
-    val gliderGun: Positions = Set(
+    val gliderGun: Positions = Positions(
         (0, 24),
         (1, 22), (1, 24),
         (2, 12), (2, 13), (2, 20), (2, 21), (2, 34), (2, 35),
@@ -41,7 +47,7 @@ package object life {
     // 2 .O.O
     // 3 ..OO
     /** kills gliders coming in at v=(-1,-1) */
-    val gliderKiller: Positions = Set( (0, 0), (0, 1), (1, 1), (2, 1), (2, 3), (3, 2), (3, 3) )
+    val gliderKiller: Positions = Positions( (0, 0), (0, 1), (1, 1), (2, 1), (2, 3), (3, 2), (3, 3) )
     //   012345678901234
     // 0 .OO.....
     // 1 .OO.....
@@ -51,20 +57,20 @@ package object life {
     // 5 O..O..OO
     // 6 ....O.OO
     val unix: Positions = offsetBy( 0, 1 )( square ) ++ offsetBy( 5, 6 )( square ) ++
-            Set( (3, 1), (4, 0), (4, 2), (5, 0), (5, 3), (6, 4) )
+            Positions( (3, 1), (4, 0), (4, 2), (5, 0), (5, 3), (6, 4) )
 
     // other shapes
     // arrow pattern:
     // X .
     // . X
     // X .
-    val arrow: Positions = Set( (0, 0), (1, 1), (2, 0) )
+    val arrow: Positions = Positions( (0, 0), (1, 1), (2, 0) )
     // cross pattern:
     // . X .
     // X X X
     // . X .
     // . X .
-    val cross: Positions = Set( (0, 1), (1, 0), (1, 1), (1, 2), (2, 1), (3, 1) )
+    val cross: Positions = Positions( (0, 1), (1, 0), (1, 1), (1, 2), (2, 1), (3, 1) )
     // bird pattern:
     // . . . . . X X
     // . . . . . X X
@@ -73,7 +79,7 @@ package object life {
     // X . . . X . .
     // X X X X X . .
     // . . X . . . .
-    val bird: Positions = Set(
+    val bird: Positions = Positions(
         /*                                   */ (0, 5), (0, 6),
         /*                                   */ (1, 5), (1, 6),
         (2, 0), (2, 1), (2, 2), (2, 3), (2, 4), (2, 5),
@@ -135,14 +141,23 @@ package object life {
       */
     def rotate( count: Int )( positions: Positions ): Positions = count match {
         case count: Int if count == 0 => positions
-        case count: Int if count == 1 => {
-            positions
-        }
-        case count: Int if count == 2 => positions
-        case count: Int if count == 3 => positions
+        case count: Int if count == 1 =>
+            maxs( positions ) match {
+                case None => positions
+                case Some( (maxx, _) ) =>
+                    positions map { case (x, y) => (y, maxx - x) }
+            }
+        case count: Int if count == 2 =>
+            maxs( positions ) match {
+                case None => positions
+                case Some( (maxx, maxy) ) =>
+                    positions map { case (x, y) => (maxx - x, maxy - y) }
+            }
+        case count: Int if count == 3 =>
+            maxs( positions ) match {
+                case None => positions
+                case Some( (_, maxy) ) =>
+                    positions map { case (x, y) => (maxy - y, x) }
+            }
     }
-
-//    def r2( count: Int ) = {
-//        case count: Int if count == 0 => ( positions: Positions ) => positions
-//    }
 }
