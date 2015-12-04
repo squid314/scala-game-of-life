@@ -46,6 +46,12 @@ class PackageSpec extends FlatSpec {
     it should "find the single 5,5 position" in {
         assert( maxs( Set( (5, 5) ) ) ==(Some( 5 ), Some( 5 )) )
     }
+    it should "find the max of the common shapes" in {
+        assert( maxs( square ) ==(Some( 1 ), Some( 1 )) )
+        assert( maxs( glider ) ==(Some( 2 ), Some( 2 )) )
+        assert( maxs( arrow ) ==(Some( 2 ), Some( 1 )) )
+        assert( maxs( cross ) ==(Some( 3 ), Some( 2 )) )
+    }
 
     behavior of "flipHorizontally"
     it should "not create positions" in {
