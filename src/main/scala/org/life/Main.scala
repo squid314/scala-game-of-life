@@ -34,7 +34,8 @@ object ConwaysGameOfLifeRunner extends App {
     val (height, width) = (50, 80)
     val populationRatio = 0.3333
     val initialPositions: Positions =
-        offsetBy( 10, 10 )( blinker )
+        offsetBy( 0, 0 )( gliderGun ) ++
+        offsetBy( 41, 41 )( rotate(2)(gliderGun) )
 //        randomPositions( height, width, populationRatio )
 
     val initBoard = MatrixBoardFactory.bounded( height, width )( initialPositions )
