@@ -6,4 +6,7 @@ build/
 .idea/
 *.iml
 
+# sbt (and maven) stuff
+target/
+
 
